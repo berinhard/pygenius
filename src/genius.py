@@ -3,6 +3,8 @@ import pygame
 import time
 import random
 
+from genius_classes import GeniusRect
+
 global screen, genius_rect, images
 
 size = (660, 660)
@@ -19,14 +21,14 @@ images = {
     'blink_green':pygame.image.load('images/blink_green.png').convert_alpha(),
     'blink_blue':pygame.image.load('images/blink_blue.png').convert_alpha(),
 }
-genius_rect = images['genius'].get_rect()
+genius_rect = GeniusRect(images['genius'].get_rect())
 
 def blink_list(sequence_list):
     for color in sequence_list:
-        screen.blit(images[color], genius_rect)
+        screen.blit(images[color], genius_rect.rect)
         pygame.display.flip()
         time.sleep(1)
-        screen.blit(images['genius'], genius_rect)
+        screen.blit(images['genius'], genius_rect.rect)
         pygame.display.flip()
         time.sleep(1)
 
