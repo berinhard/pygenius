@@ -1,5 +1,9 @@
 # -*- encoding:utf-8 -*-
 import pygame
+import time
+import random
+
+global screen, genius_rect, images
 
 size = (660, 660)
 
@@ -17,14 +21,22 @@ genius_rect = images['genius'].get_rect()
 
 screen.fill((0, 0, 0))
 
+def blink_list(sequence_list):
+    for color in sequence_list:
+        screen.blit(images[color], genius_rect)
+        pygame.display.flip()
+        time.sleep(1)
+        screen.blit(images['genius'], genius_rect)
+        pygame.display.flip()
+        time.sleep(1)
+
+def get_random_color():
+    color_list = images.keys()
+    color_list.remove('genius')
+    return random.choice(color_list)
+
+color_list = []
+
 while True:
-    screen.blit(images['genius'], genius_rect)
-    pygame.display.flip()
-    screen.blit(images['blink_red'], genius_rect)
-    pygame.display.flip()
-    screen.blit(images['blink_yellow'], genius_rect)
-    pygame.display.flip()
-    screen.blit(images['blink_green'], genius_rect)
-    pygame.display.flip()
-    screen.blit(images['blink_blue'], genius_rect)
-    pygame.display.flip()
+    color_list.append(get_random_color())
+    blink_list(color_list)
