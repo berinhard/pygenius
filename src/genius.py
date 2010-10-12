@@ -35,8 +35,12 @@ def get_random_color():
     color_list.remove('genius')
     return random.choice(color_list)
 
-color_list = []
+def main_loop():
+    color_list = []
 
-while True:
-    color_list.append(get_random_color())
-    blink_list(color_list)
+    while True:
+        color_list.append(get_random_color())
+        blink_list(color_list)
+
+if __name__ == '__main__':
+    main_loop()
