@@ -46,6 +46,18 @@ def mouse_click(event):
     left = 1
     return event.type == pygame.MOUSEBUTTONDOWN and event.button == left
 
+def handle_player_answer(answers, color_list, area):
+    next_color_pos = len(answers)
+    if color_list[next_color_pos] == area:
+        answers.append(area)
+        blink_color(area)
+    else:
+        print 'perdeu babaca!!!!'
+        sys.exit(0)
+
+def continue_playing(answers, color_list):
+    return len(answers) != len(color_list)
+
 def main_loop():
     color_list = []
     player_time = False
@@ -55,12 +67,15 @@ def main_loop():
             if event.type == pygame.QUIT:
                 sys.exit(0)
             elif player_time and mouse_click(event):
-                print genius_rect.get_area_clicked(event.pos)
-                player_time = False
+                area = genius_rect.get_area_clicked(event.pos)
+                if area:
+                    handle_player_answer(player_answers, color_list, area)
+                    player_time = continue_playing(player_answers, color_list)
         if not player_time:
             color_list.append(get_random_color())
             blink_list(color_list)
             player_time = True
+            player_answers = []
 
 if __name__ == '__main__':
     main_loop()
