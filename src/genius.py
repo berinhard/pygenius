@@ -25,13 +25,17 @@ images = {
 genius_rect = GeniusRect(images['genius'].get_rect())
 
 def blink_list(sequence_list):
+    time.sleep(1)
     for color in sequence_list:
-        screen.blit(images[color], genius_rect.rect)
-        pygame.display.flip()
-        time.sleep(1)
-        screen.blit(images['genius'], genius_rect.rect)
-        pygame.display.flip()
-        time.sleep(1)
+        blink_color(color)
+        time.sleep(0.5)
+
+def blink_color(color):
+    screen.blit(images[color], genius_rect.rect)
+    pygame.display.flip()
+    time.sleep(0.5)
+    screen.blit(images['genius'], genius_rect.rect)
+    pygame.display.flip()
 
 def get_random_color():
     color_list = images.keys()
