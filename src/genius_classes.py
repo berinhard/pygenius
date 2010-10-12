@@ -1,6 +1,11 @@
 # -*- encoding:utf-8 -*-
 from pygame import Rect
 
+GREEN = 'area_1'
+RED = 'area_2'
+YELLOW = 'area_3'
+BLUE = 'area_4'
+
 class GeniusRect():
 
     def __init__(self, rect):
@@ -37,3 +42,15 @@ class GeniusRect():
         height = int(self.rect.height / 2)
         width = int(self.rect.width / 2)
         return Rect(left, top, width, height)
+
+    def get_area_clicked(self, position):
+        area = ''
+        if self.area_1.collidepoint(position):
+            area = GREEN
+        if self.area_2.collidepoint(position):
+            area = RED
+        if self.area_3.collidepoint(position):
+            area = YELLOW
+        if self.area_4.collidepoint(position):
+            area = BLUE
+        return area

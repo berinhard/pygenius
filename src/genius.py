@@ -4,7 +4,7 @@ import time
 import random
 import sys
 
-from genius_classes import GeniusRect
+from genius_classes import *
 
 global screen, genius_rect, images, player_time
 
@@ -17,10 +17,10 @@ screen.fill((0, 0, 0))
 
 images = {
     'genius':pygame.image.load('images/genius.png').convert_alpha(),
-    'blink_red':pygame.image.load('images/blink_red.png').convert_alpha(),
-    'blink_yellow':pygame.image.load('images/blink_yellow.png').convert_alpha(),
-    'blink_green':pygame.image.load('images/blink_green.png').convert_alpha(),
-    'blink_blue':pygame.image.load('images/blink_blue.png').convert_alpha(),
+    RED:pygame.image.load('images/blink_red.png').convert_alpha(),
+    YELLOW:pygame.image.load('images/blink_yellow.png').convert_alpha(),
+    GREEN:pygame.image.load('images/blink_green.png').convert_alpha(),
+    BLUE:pygame.image.load('images/blink_blue.png').convert_alpha(),
 }
 genius_rect = GeniusRect(images['genius'].get_rect())
 
@@ -51,6 +51,7 @@ def main_loop():
             if event.type == pygame.QUIT:
                 sys.exit(0)
             elif player_time and mouse_click(event):
+                print genius_rect.get_area_clicked(event.pos)
                 player_time = False
         if not player_time:
             color_list.append(get_random_color())
