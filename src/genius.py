@@ -10,6 +10,8 @@ size = (660, 660)
 pygame.init()
 screen = pygame.display.set_mode(size)
 
+screen.fill((0, 0, 0))
+
 images = {
     'genius':pygame.image.load('images/genius.png').convert_alpha(),
     'blink_red':pygame.image.load('images/blink_red.png').convert_alpha(),
@@ -18,8 +20,6 @@ images = {
     'blink_blue':pygame.image.load('images/blink_blue.png').convert_alpha(),
 }
 genius_rect = images['genius'].get_rect()
-
-screen.fill((0, 0, 0))
 
 def blink_list(sequence_list):
     for color in sequence_list:
