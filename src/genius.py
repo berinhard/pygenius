@@ -33,6 +33,8 @@ class GeniusGame(object):
             BLUE:pygame.image.load('images/blink_blue.png').convert_alpha(),
         }
         self.genius_rect = GeniusRect(self.images['genius'].get_rect())
+        self.screen.blit(self.images['genius'], self.genius_rect.rect)
+        pygame.display.flip()
 
         self.color_list = []
         self.player_answers = []
@@ -78,8 +80,6 @@ class GeniusGame(object):
     def main_loop(self):
 
         while True:
-            self.screen.blit(self.images['genius'], self.genius_rect.rect)
-            pygame.display.flip()
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
