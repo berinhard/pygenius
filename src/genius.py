@@ -24,7 +24,6 @@ class GeniusGame(object):
 
         self.size = size
         self.screen = pygame.display.set_mode(size)
-        self.screen.fill(BLACK)
 
         self.images = {
             'genius':pygame.image.load('images/genius.png').convert_alpha(),
@@ -35,8 +34,16 @@ class GeniusGame(object):
         }
         image_rect = self.images['genius'].get_rect()
         image_rect.move_ip(35, 0)
+        self.screen.fill(BLACK)
         self.genius_rect = GeniusRect(image_rect)
         self.screen.blit(self.images['genius'], self.genius_rect.rect)
+
+        self.font = pygame.font.Font(None, 30)
+        text = self.font.render(u'Aperte <SPACE> para Começar!', 0, WHITE)
+        text_rect = text.get_rect()
+        text_rect.move_ip(200, 630)
+        self.screen.blit(text, text_rect)
+
         pygame.display.flip()
 
         self.color_list = []
@@ -93,6 +100,8 @@ class GeniusGame(object):
                         self.handle_player_answer(area)
                         self.player_time = self.continue_playing()
                 elif not self.game_started and key_pressed(event, pygame.K_SPACE):
+                    self.screen.fill(BLACK)
+                    self.screen.blit(self.images['genius'], self.genius_rect.rect)
                     self.game_started = True
 
             if self.is_genius_time():
