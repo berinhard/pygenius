@@ -8,6 +8,14 @@ from genius_classes import *
 
 BLACK = (0, 0, 0)
 
+def mouse_click(event):
+    left = 1
+    return event.type == pygame.MOUSEBUTTONDOWN and event.button == left
+
+def key_pressed(event, key):
+    return event.type == pygame.KEYDOWN and event.key == key
+
+
 class GeniusGame(object):
 
     def __init__(self, size):
@@ -28,6 +36,8 @@ class GeniusGame(object):
 
         self.color_list = []
         self.player_answers = []
+        self.player_time = False
+        self.game_started = False
 
     def blink_genius_list(self):
         time.sleep(1)
@@ -47,10 +57,6 @@ class GeniusGame(object):
         color_list.remove('genius')
         return random.choice(color_list)
 
-    def mouse_click(self, event):
-        left = 1
-        return event.type == pygame.MOUSEBUTTONDOWN and event.button == left
-
     def handle_player_answer(self, area):
         next_color_pos = len(self.player_answers)
         if self.color_list[next_color_pos] == area:
@@ -63,22 +69,33 @@ class GeniusGame(object):
     def continue_playing(self):
         return len(self.player_answers) != len(self.color_list)
 
+    def is_player_time(self):
+        return self.player_time and self.game_started
+
+    def is_genius_time(self):
+        return not self.player_time and self.game_started
+
     def main_loop(self):
-        player_time = False
 
         while True:
+            self.screen.blit(self.images['genius'], self.genius_rect.rect)
+            pygame.display.flip()
+
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     sys.exit(0)
-                elif player_time and self.mouse_click(event):
+                elif self.is_player_time() and mouse_click(event):
                     area = self.genius_rect.get_area_clicked(event.pos)
                     if area and self.screen.get_at(event.pos) != BLACK:
                         self.handle_player_answer(area)
-                        player_time = self.continue_playing()
-            if not player_time:
+                        self.player_time = self.continue_playing()
+                elif not self.game_started and key_pressed(event, pygame.K_SPACE):
+                    self.game_started = True
+
+            if self.is_genius_time():
                 self.color_list.append(self.get_random_color())
                 self.blink_genius_list()
-                player_time = True
+                self.player_time = True
                 self.player_answers = []
 
 if __name__ == '__main__':
