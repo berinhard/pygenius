@@ -72,7 +72,7 @@ class GeniusGame(object):
                     sys.exit(0)
                 elif player_time and self.mouse_click(event):
                     area = self.genius_rect.get_area_clicked(event.pos)
-                    if area:
+                    if area and self.screen.get_at(event.pos) != BLACK:
                         self.handle_player_answer(area)
                         player_time = self.continue_playing()
             if not player_time:
