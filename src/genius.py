@@ -16,6 +16,7 @@ class GeniusGame(object):
         self.size = size
         self.screen = pygame.display.set_mode(size)
         self.screen.fill(BLACK)
+
         self.images = {
             'genius':pygame.image.load('images/genius.png').convert_alpha(),
             RED:pygame.image.load('images/blink_red.png').convert_alpha(),
@@ -25,11 +26,12 @@ class GeniusGame(object):
         }
         self.genius_rect = GeniusRect(self.images['genius'].get_rect())
 
+        self.color_list = []
+        self.player_answers = []
 
-
-    def blink_list(self, sequence_list):
+    def blink_genius_list(self):
         time.sleep(1)
-        for color in sequence_list:
+        for color in self.color_list:
             self.blink_color(color)
             time.sleep(0.5)
 
@@ -49,20 +51,19 @@ class GeniusGame(object):
         left = 1
         return event.type == pygame.MOUSEBUTTONDOWN and event.button == left
 
-    def handle_player_answer(self, answers, color_list, area):
-        next_color_pos = len(answers)
-        if color_list[next_color_pos] == area:
-            answers.append(area)
+    def handle_player_answer(self, area):
+        next_color_pos = len(self.player_answers)
+        if self.color_list[next_color_pos] == area:
+            self.player_answers.append(area)
             self.blink_color(area)
         else:
             print 'perdeu babaca!!!!'
             sys.exit(0)
 
-    def continue_playing(self, answers, color_list):
-        return len(answers) != len(color_list)
+    def continue_playing(self):
+        return len(self.player_answers) != len(self.color_list)
 
     def main_loop(self):
-        color_list = []
         player_time = False
 
         while True:
@@ -72,13 +73,13 @@ class GeniusGame(object):
                 elif player_time and self.mouse_click(event):
                     area = self.genius_rect.get_area_clicked(event.pos)
                     if area:
-                        self.handle_player_answer(player_answers, color_list, area)
-                        player_time = self.continue_playing(player_answers, color_list)
+                        self.handle_player_answer(area)
+                        player_time = self.continue_playing()
             if not player_time:
-                color_list.append(self.get_random_color())
-                self.blink_list(color_list)
+                self.color_list.append(self.get_random_color())
+                self.blink_genius_list()
                 player_time = True
-                player_answers = []
+                self.player_answers = []
 
 if __name__ == '__main__':
     game = GeniusGame((660, 660))
