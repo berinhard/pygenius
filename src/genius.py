@@ -39,10 +39,7 @@ class GeniusGame(object):
         self.screen.blit(self.images['genius'], self.genius_rect.rect)
 
         self.font = pygame.font.Font(None, 30)
-        text = self.font.render(u'Aperte <SPACE> para Começar!', 0, WHITE)
-        self.text_rect = text.get_rect()
-        self.text_rect.move_ip(200, 630)
-        self.screen.blit(text, self.text_rect)
+        self.write_on_screen(u'Aperte <SPACE> para começar!', (200, 630))
 
         pygame.display.flip()
 
@@ -69,15 +66,19 @@ class GeniusGame(object):
         color_list.remove('genius')
         return random.choice(color_list)
 
+    def write_on_screen(self, text_out, position):
+        text = self.font.render(text_out, 0, WHITE)
+        text_rect = text.get_rect()
+        text_rect.move_ip(position)
+        self.screen.blit(text, text_rect)
+
     def handle_player_answer(self, area):
         next_color_pos = len(self.player_answers)
         if self.color_list[next_color_pos] == area:
             self.player_answers.append(area)
             self.blink_color(area)
         else:
-            text = self.font.render(u'Você perdeu! Pontuação: %s... Aperte <SPACE> para jogar de novo!' % str(len(self.color_list) - 1), 0, WHITE)
-            self.text_rect.move_ip(-190, 0)
-            self.screen.blit(text, self.text_rect)
+            self.write_on_screen(u'Você perdeu! Pontuação: %s... Aperte <SPACE> para jogar de novo!' % str(len(self.color_list) - 1), (10, 630))
             self.game_started = False
             pygame.display.flip()
 
