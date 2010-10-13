@@ -75,10 +75,10 @@ class GeniusGame(object):
             self.player_answers.append(area)
             self.blink_color(area)
         else:
-            text = self.font.render(u'Você perdeu! Pontuação: %s' % str(len(self.color_list) - 1), 0, WHITE)
+            text = self.font.render(u'Você perdeu! Pontuação: %s... Aperte <SPACE> para jogar de novo!' % str(len(self.color_list) - 1), 0, WHITE)
+            self.text_rect.move_ip(-190, 0)
             self.screen.blit(text, self.text_rect)
             pygame.display.flip()
-            sys.exit(0)
 
     def continue_playing(self):
         return len(self.player_answers) != len(self.color_list)
