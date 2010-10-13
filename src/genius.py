@@ -78,6 +78,7 @@ class GeniusGame(object):
             text = self.font.render(u'Você perdeu! Pontuação: %s... Aperte <SPACE> para jogar de novo!' % str(len(self.color_list) - 1), 0, WHITE)
             self.text_rect.move_ip(-190, 0)
             self.screen.blit(text, self.text_rect)
+            self.game_started = False
             pygame.display.flip()
 
     def continue_playing(self):
@@ -88,6 +89,16 @@ class GeniusGame(object):
 
     def is_genius_time(self):
         return not self.player_time and self.game_started
+
+    def start_game_enviroment(self):
+        self.screen.fill(BLACK)
+        self.screen.blit(self.images['genius'], self.genius_rect.rect)
+        pygame.display.flip()
+
+        self.game_started = True
+        self.color_list = []
+        self.player_answers = []
+        self.player_time = False
 
     def main_loop(self):
 
@@ -102,9 +113,7 @@ class GeniusGame(object):
                         self.handle_player_answer(area)
                         self.player_time = self.continue_playing()
                 elif not self.game_started and key_pressed(event, pygame.K_SPACE):
-                    self.screen.fill(BLACK)
-                    self.screen.blit(self.images['genius'], self.genius_rect.rect)
-                    self.game_started = True
+                    self.start_game_enviroment()
 
             if self.is_genius_time():
                 self.color_list.append(self.get_random_color())
