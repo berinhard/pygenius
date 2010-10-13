@@ -7,6 +7,7 @@ import sys
 from genius_classes import *
 
 BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
 
 def mouse_click(event):
     left = 1
@@ -32,7 +33,9 @@ class GeniusGame(object):
             GREEN:pygame.image.load('images/blink_green.png').convert_alpha(),
             BLUE:pygame.image.load('images/blink_blue.png').convert_alpha(),
         }
-        self.genius_rect = GeniusRect(self.images['genius'].get_rect())
+        image_rect = self.images['genius'].get_rect()
+        image_rect.move_ip(35, 0)
+        self.genius_rect = GeniusRect(image_rect)
         self.screen.blit(self.images['genius'], self.genius_rect.rect)
         pygame.display.flip()
 
