@@ -6,76 +6,80 @@ import sys
 
 from genius_classes import *
 
-global screen, genius_rect, images, player_time
+BLACK = (0, 0, 0)
 
-size = (660, 660)
+class GeniusGame(object):
 
-pygame.init()
-screen = pygame.display.set_mode(size)
+    def __init__(self, size):
+        pygame.init()
 
-screen.fill((0, 0, 0))
+        self.size = size
+        self.screen = pygame.display.set_mode(size)
+        self.screen.fill(BLACK)
+        self.images = {
+            'genius':pygame.image.load('images/genius.png').convert_alpha(),
+            RED:pygame.image.load('images/blink_red.png').convert_alpha(),
+            YELLOW:pygame.image.load('images/blink_yellow.png').convert_alpha(),
+            GREEN:pygame.image.load('images/blink_green.png').convert_alpha(),
+            BLUE:pygame.image.load('images/blink_blue.png').convert_alpha(),
+        }
+        self.genius_rect = GeniusRect(self.images['genius'].get_rect())
 
-images = {
-    'genius':pygame.image.load('images/genius.png').convert_alpha(),
-    RED:pygame.image.load('images/blink_red.png').convert_alpha(),
-    YELLOW:pygame.image.load('images/blink_yellow.png').convert_alpha(),
-    GREEN:pygame.image.load('images/blink_green.png').convert_alpha(),
-    BLUE:pygame.image.load('images/blink_blue.png').convert_alpha(),
-}
-genius_rect = GeniusRect(images['genius'].get_rect())
 
-def blink_list(sequence_list):
-    time.sleep(1)
-    for color in sequence_list:
-        blink_color(color)
+
+    def blink_list(self, sequence_list):
+        time.sleep(1)
+        for color in sequence_list:
+            self.blink_color(color)
+            time.sleep(0.5)
+
+    def blink_color(self, color):
+        self.screen.blit(self.images[color], self.genius_rect.rect)
+        pygame.display.flip()
         time.sleep(0.5)
+        self.screen.blit(self.images['genius'], self.genius_rect.rect)
+        pygame.display.flip()
 
-def blink_color(color):
-    screen.blit(images[color], genius_rect.rect)
-    pygame.display.flip()
-    time.sleep(0.5)
-    screen.blit(images['genius'], genius_rect.rect)
-    pygame.display.flip()
+    def get_random_color(self):
+        color_list = self.images.keys()
+        color_list.remove('genius')
+        return random.choice(color_list)
 
-def get_random_color():
-    color_list = images.keys()
-    color_list.remove('genius')
-    return random.choice(color_list)
+    def mouse_click(self, event):
+        left = 1
+        return event.type == pygame.MOUSEBUTTONDOWN and event.button == left
 
-def mouse_click(event):
-    left = 1
-    return event.type == pygame.MOUSEBUTTONDOWN and event.button == left
+    def handle_player_answer(self, answers, color_list, area):
+        next_color_pos = len(answers)
+        if color_list[next_color_pos] == area:
+            answers.append(area)
+            self.blink_color(area)
+        else:
+            print 'perdeu babaca!!!!'
+            sys.exit(0)
 
-def handle_player_answer(answers, color_list, area):
-    next_color_pos = len(answers)
-    if color_list[next_color_pos] == area:
-        answers.append(area)
-        blink_color(area)
-    else:
-        print 'perdeu babaca!!!!'
-        sys.exit(0)
+    def continue_playing(self, answers, color_list):
+        return len(answers) != len(color_list)
 
-def continue_playing(answers, color_list):
-    return len(answers) != len(color_list)
+    def main_loop(self):
+        color_list = []
+        player_time = False
 
-def main_loop():
-    color_list = []
-    player_time = False
-
-    while True:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                sys.exit(0)
-            elif player_time and mouse_click(event):
-                area = genius_rect.get_area_clicked(event.pos)
-                if area:
-                    handle_player_answer(player_answers, color_list, area)
-                    player_time = continue_playing(player_answers, color_list)
-        if not player_time:
-            color_list.append(get_random_color())
-            blink_list(color_list)
-            player_time = True
-            player_answers = []
+        while True:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    sys.exit(0)
+                elif player_time and self.mouse_click(event):
+                    area = self.genius_rect.get_area_clicked(event.pos)
+                    if area:
+                        self.handle_player_answer(player_answers, color_list, area)
+                        player_time = self.continue_playing(player_answers, color_list)
+            if not player_time:
+                color_list.append(self.get_random_color())
+                self.blink_list(color_list)
+                player_time = True
+                player_answers = []
 
 if __name__ == '__main__':
-    main_loop()
+    game = GeniusGame((660, 660))
+    game.main_loop()
