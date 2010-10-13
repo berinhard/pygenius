@@ -40,9 +40,9 @@ class GeniusGame(object):
 
         self.font = pygame.font.Font(None, 30)
         text = self.font.render(u'Aperte <SPACE> para Começar!', 0, WHITE)
-        text_rect = text.get_rect()
-        text_rect.move_ip(200, 630)
-        self.screen.blit(text, text_rect)
+        self.text_rect = text.get_rect()
+        self.text_rect.move_ip(200, 630)
+        self.screen.blit(text, self.text_rect)
 
         pygame.display.flip()
 
@@ -75,7 +75,9 @@ class GeniusGame(object):
             self.player_answers.append(area)
             self.blink_color(area)
         else:
-            print 'perdeu babaca!!!!'
+            text = self.font.render(u'Você perdeu! Pontuação: %s' % str(len(self.color_list) - 1), 0, WHITE)
+            self.screen.blit(text, self.text_rect)
+            pygame.display.flip()
             sys.exit(0)
 
     def continue_playing(self):
